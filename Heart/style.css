@@ -1,0 +1,1062 @@
+
+/* ==========================================
+   BIRTHDAY PHOTOBOOK
+   COMPLETE UPDATED STYLE.CSS
+   ========================================== */
+
+/* ROOT VARIABLES */
+
+:root {
+  --background: #eae8e4;
+  --paper: #ffffff;
+  --ink: #222222;
+  --muted: #888888;
+
+  --book-width: 540px;
+  --book-height: 370px;
+
+  --turn-duration: 950ms;
+}
+
+/* ==========================================
+   GLOBAL RESET
+   ========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: "DM Sans", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================
+   MAIN APPLICATION
+   ========================================== */
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ==========================================
+   BOOK STAGE
+   ========================================== */
+
+.book-stage {
+  position: relative;
+
+  width: 100%;
+  height: 450px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  perspective: 2500px;
+}
+
+/* ==========================================
+   BOOK POSITION AND SHADOW
+   ========================================== */
+
+.book {
+  position: relative;
+
+  width: var(--book-width);
+  height: var(--book-height);
+
+  flex-shrink: 0;
+  transform-style: preserve-3d;
+
+  transform: translateX(0);
+
+  transition:
+    transform var(--turn-duration) ease;
+
+  filter:
+    drop-shadow(0 3px 3px rgba(0, 0, 0, 0.08))
+    drop-shadow(0 12px 10px rgba(0, 0, 0, 0.12))
+    drop-shadow(0 28px 24px rgba(0, 0, 0, 0.20))
+    drop-shadow(0 38px 35px rgba(0, 0, 0, 0.10));
+}
+
+/* Open book centered */
+
+.book.open {
+  transform: translateX(calc(var(--book-width) / 2));
+}
+
+/* Finished book centered */
+
+.book.finished {
+  transform: translateX(var(--book-width));
+}
+
+/* ==========================================
+   BOOK SPINE
+   ========================================== */
+
+.book::before {
+  content: "";
+
+  position: absolute;
+  left: -3px;
+  top: 0;
+
+  width: 7px;
+  height: 100%;
+
+  background: linear-gradient(
+    to right,
+    #d5d5d5,
+    #eeeeee,
+    #bcbcbc
+  );
+
+  border-radius: 3px;
+  z-index: 0;
+}
+
+/* ==========================================
+   PAGE FLIPPING
+   ========================================== */
+
+.sheet {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  transform-origin: left center;
+  transform-style: preserve-3d;
+
+  transform: rotateY(0deg);
+
+  transition:
+    transform var(--turn-duration)
+    cubic-bezier(0.65, 0.05, 0.3, 1);
+
+  cursor: pointer;
+}
+
+.sheet.flipped {
+  transform: rotateY(-180deg);
+}
+
+/* ==========================================
+   BOOK PAGES
+   ========================================== */
+
+.page {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: var(--paper);
+
+  border: 1px solid #e8e8e8;
+  border-radius: 2px 5px 5px 2px;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  overflow: hidden;
+
+  box-shadow:
+    inset -10px 0 18px rgba(0, 0, 0, 0.035),
+    2px 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.page.front {
+  transform: rotateY(0deg);
+}
+
+.page.back {
+  transform: rotateY(180deg);
+
+  border-radius: 5px 2px 2px 5px;
+
+  box-shadow:
+    inset 10px 0 18px rgba(0, 0, 0, 0.035),
+    -2px 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   GENERAL PAGE CONTENT
+   ========================================== */
+
+.page-inner {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 25px 30px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================
+   FRONT COVER
+   ========================================== */
+
+.cover {
+  background: #fffefc;
+  border: 1px solid rgba(0, 0, 0, 0.035);
+  border-radius: 3px;
+}
+
+.cover .cover-border {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 28px 35px 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+}
+
+.cover .eyebrow {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+
+  letter-spacing: 2.5px;
+  color: #99938f;
+}
+
+.cover .cover-center {
+  flex: 1;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cover .cover-center h2 {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 25px;
+  font-weight: 400;
+
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+
+  color: #292725;
+  margin: 0;
+
+  transform: translateY(-4px);
+}
+
+.cover .cover-bottom {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+
+  letter-spacing: 0.15px;
+  line-height: 1.5;
+
+  color: #96908b;
+}
+
+/* ==========================================
+   GENERAL STORY TYPOGRAPHY
+   ========================================== */
+
+.story-page {
+  gap: 14px;
+}
+
+.story-text {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.story-text p {
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 11px;
+  line-height: 1.65;
+
+  margin: 0;
+  color: #333333;
+}
+
+/* ==========================================
+   GENERAL IMAGE STYLING
+   ========================================== */
+
+.story-image {
+  overflow: hidden;
+  background: #f7f7f7;
+  flex-shrink: 0;
+}
+
+.story-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ==========================================
+   PAGE 01 - FIRST YEAR
+   FULL-WIDTH IMAGE TOP / TEXT BOTTOM
+   ========================================== */
+
+.page-inner.layout-top {
+  padding: 0;
+  gap: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+}
+
+.layout-top .landscape-image {
+  width: 100%;
+  height: 65%;
+  flex-shrink: 0;
+}
+
+.layout-top .story-text {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  padding: 15px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 12px;
+}
+
+.layout-top .story-text p {
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   PAGE 02 - GETTING CLOSER
+   TEXT TOP / FULL-WIDTH IMAGE BOTTOM
+   ========================================== */
+
+.page-inner.layout-bottom {
+  padding: 0;
+  gap: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+}
+
+.layout-bottom .story-text {
+  width: 100%;
+  height: 40%;
+  flex-shrink: 0;
+
+  padding: 20px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 12px;
+}
+
+.layout-bottom .story-text p {
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.layout-bottom .landscape-image {
+  width: 100%;
+  height: 60%;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   PAGE 03 - SHARED INTERESTS
+   FULL-HEIGHT PHOTO LEFT / TEXT RIGHT
+   ========================================== */
+
+.page-inner.story-split-page {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  gap: 0;
+
+  display: grid;
+  grid-template-columns: 49% 51%;
+  align-items: stretch;
+
+  background: #ffffff;
+}
+
+.story-split-page .split-photo {
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+.story-split-page .split-photo img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.story-split-page .split-message {
+  width: 100%;
+  height: 100%;
+
+  padding: 20px 22px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+  text-align: center;
+}
+
+.story-split-page .split-message p {
+  margin: 0;
+
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 11px;
+  line-height: 1.65;
+
+  color: #333333;
+}
+
+/* ==========================================
+   PAGE 04 - BECOMING INSEPARABLE
+   FULL-WIDTH PHOTO TOP / TEXT BOTTOM
+   ========================================== */
+
+.page-inner.story-landscape-page {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  gap: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+}
+
+.story-landscape-page .landscape-photo {
+  width: 100%;
+  height: 65%;
+
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.story-landscape-page .landscape-photo img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.story-landscape-page .landscape-message {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  padding: 15px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+  text-align: center;
+}
+
+.story-landscape-page .landscape-message p {
+  margin: 0;
+
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 11px;
+  line-height: 1.5;
+
+  color: #333333;
+}
+
+/* ==========================================
+   PAGE 05 - APPRECIATION
+   FULL-HEIGHT PHOTO LEFT / TEXT RIGHT
+   ========================================== */
+
+.page-inner.layout-half-photo-left {
+  padding: 0;
+  gap: 0;
+
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.layout-half-photo-left .half-image {
+  width: 49%;
+  height: 100%;
+}
+
+.layout-half-photo-left .story-text {
+  flex: 1;
+  min-width: 0;
+
+  padding: 22px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 20px;
+}
+
+/* ==========================================
+   PAGE 06 - FRIENDSHIP CHALLENGES
+   TEXT LEFT / FULL-HEIGHT PHOTO RIGHT
+   ========================================== */
+
+.page-inner.layout-half-photo-right {
+  padding: 0;
+  gap: 0;
+
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.layout-half-photo-right .half-image {
+  width: 49%;
+  height: 100%;
+}
+
+.layout-half-photo-right .story-text {
+  flex: 1;
+  min-width: 0;
+
+  padding: 22px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 20px;
+}
+
+/* ==========================================
+   PAGE 07 - FUTURE PLANS
+   FULL-WIDTH PHOTO TOP / TEXT BOTTOM
+   ========================================== */
+
+.page-inner.layout-centered {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  gap: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  background: #ffffff;
+}
+
+.layout-centered .centered-image {
+  width: 100%;
+  height: 65%;
+
+  flex-shrink: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.layout-centered .centered-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.layout-centered .story-text {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  padding: 15px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 12px;
+}
+
+.layout-centered .story-text p {
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   PAGE 08 - FOURTH YEAR
+   FULL-WIDTH PHOTO TOP / TEXT BOTTOM
+   ========================================== */
+
+.page-inner.layout-offset {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  gap: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  background: #ffffff;
+}
+
+.layout-offset .offset-image {
+  width: 100%;
+  height: 65%;
+
+  flex-shrink: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.layout-offset .offset-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.layout-offset .story-text {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  padding: 15px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 12px;
+}
+
+.layout-offset .story-text p {
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   FINAL LEFT PAGE - BIRTHDAY LETTER
+   ========================================== */
+
+.page-inner.birthday-page {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 20px 32px 48px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  background: #ffffff;
+}
+
+.birthday-heading {
+  font-family: "Allura", cursive;
+
+  font-size: 39px;
+  font-weight: 400;
+  line-height: 0.85;
+
+  color: #222222;
+  margin: 0 0 20px;
+}
+
+.birthday-letter {
+  width: 100%;
+  max-width: 440px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.birthday-letter p {
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 10.5px;
+  font-weight: 400;
+  line-height: 1.45;
+
+  color: #333333;
+  text-align: center;
+
+  margin: 0;
+}
+
+.birthday-signature {
+  position: absolute;
+
+  bottom: 15px;
+  left: 25px;
+
+  width: 100px;
+  height: 40px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.birthday-signature img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ==========================================
+   FINAL RIGHT PAGE - TWO ENDING PHOTOS
+   ========================================== */
+
+.page-inner.ending-photo-page {
+  width: 100%;
+  height: 100%;
+
+  padding: 20px 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #ffffff;
+}
+
+.ending-photo-layout {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 22px;
+}
+
+.ending-photo {
+  width: 40%;
+  height: 250px;
+
+  object-fit: cover;
+  object-position: center;
+
+  display: block;
+  flex-shrink: 0;
+}
+
+.ending-left {
+  transform: translateY(-25px);
+}
+
+.ending-right {
+  transform: translateY(25px);
+}
+
+/* ==========================================
+   BACK COVER
+   ========================================== */
+
+.back-cover {
+  background: #ffffff;
+  border: none;
+}
+
+.back-cover-content {
+  width: 100%;
+  height: 100%;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+}
+
+.back-cover .eyebrow {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+
+  color: #999999;
+}
+
+.back-cover-center {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-cover-center h2 {
+  font-family: "Playfair Display", Georgia, serif;
+
+  font-size: 34px;
+  font-weight: 400;
+
+  margin: 0;
+}
+
+.back-cover-center p {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 15px;
+  font-style: italic;
+
+  color: #888888;
+  margin: 8px 0;
+}
+
+.back-cover-bottom {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 12px;
+  font-style: italic;
+
+  color: #888888;
+}
+
+/* ==========================================
+   PAGE INDICATOR
+   ========================================== */
+
+.page-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 15px;
+  text-align: center;
+}
+
+#pageStatus {
+  font-family: "DM Sans", Arial, sans-serif;
+
+  font-size: 12px;
+  font-weight: 400;
+
+  letter-spacing: 1.5px;
+  color: #555555;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 1150px) {
+
+  .book-stage {
+    height: 410px;
+  }
+
+  .book {
+    zoom: 0.85;
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .book-stage {
+    height: 340px;
+  }
+
+  .book {
+    zoom: 0.65;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .app {
+    padding: 20px 10px;
+  }
+
+  .book-stage {
+    height: 270px;
+  }
+
+  .book {
+    zoom: 0.48;
+  }
+
+  .page-indicator {
+    margin-top: 10px;
+  }
+
+}
+
+@media (max-width: 540px) {
+
+  .book {
+    zoom: 0.44;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  .book {
+    zoom: 0.4;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .book {
+    zoom: 0.34;
+  }
+
+}
+
+@media (max-width: 400px) {
+
+  .book {
+    zoom: 0.32;
+  }
+
+  .book-stage {
+    height: 200px;
+  }
+
+}
+
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .sheet,
+  .book {
+    transition-duration: 0.01ms;
+  }
+
+}

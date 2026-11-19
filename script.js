@@ -10,6 +10,9 @@ const sheets = Array.from(document.querySelectorAll(".sheet"));
 const pageStatus = document.getElementById("pageStatus");
 const stage = document.querySelector(".book-stage");
 const music = document.getElementById("birthdayMusic");
+const rotatedMobileQuery = window.matchMedia(
+  "(max-width: 700px) and (orientation: portrait)"
+);
 
 // ==========================================
 // BOOK STATE
@@ -192,6 +195,23 @@ book.addEventListener("click", (event) => {
 
   if (isTurning) return;
 
+  if (rotatedMobileQuery.matches) {
+    const rect = stage.getBoundingClientRect();
+    event.stopPropagation();
+
+    if (currentSheet === 0) {
+      nextPage();
+    } else if (currentSheet === totalSheets) {
+      previousPage();
+    } else if (event.clientY < rect.top + rect.height / 2) {
+      previousPage();
+    } else {
+      nextPage();
+    }
+
+    return;
+  }
+
   // Front cover: open book
   if (currentSheet === 0) {
     nextPage();
@@ -222,6 +242,20 @@ book.addEventListener("click", (event) => {
 stage.addEventListener("click", (event) => {
 
   if (isTurning) return;
+
+  if (rotatedMobileQuery.matches) {
+    if (currentSheet === 0 || currentSheet === totalSheets) return;
+
+    const rect = stage.getBoundingClientRect();
+
+    if (event.clientY < rect.top + rect.height / 2) {
+      previousPage();
+    } else {
+      nextPage();
+    }
+
+    return;
+  }
 
   if (currentSheet === 0 ||
       currentSheet === totalSheets) {
@@ -282,21 +316,28 @@ stage.addEventListener("touchend", (event) => {
   const differenceY =
     event.changedTouches[0].screenY - touchStartY;
 
-  // Ignore vertical scrolling
-  if (Math.abs(differenceY) > Math.abs(differenceX)) {
+  const primaryDifference = rotatedMobileQuery.matches
+    ? differenceY
+    : differenceX;
+  const secondaryDifference = rotatedMobileQuery.matches
+    ? differenceX
+    : differenceY;
+
+  // Ignore swipes across the book instead of along its page-turn axis.
+  if (Math.abs(secondaryDifference) > Math.abs(primaryDifference)) {
     return;
   }
 
-  // Swipe left: next page
-  if (differenceX < -50) {
+  // Swipe toward the top/left: next page.
+  if (primaryDifference < -50) {
 
     suppressClick = true;
     nextPage();
 
   }
 
-  // Swipe right: previous page
-  else if (differenceX > 50) {
+  // Swipe toward the bottom/right: previous page.
+  else if (primaryDifference > 50) {
 
     suppressClick = true;
     previousPage();

@@ -1048,6 +1048,52 @@ body {
 
 }
 
+@media (max-width: 700px) and (orientation: portrait) {
+
+  body {
+    overflow: hidden;
+  }
+
+  .app {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    width: 100dvh;
+    height: 100vw;
+    min-height: 0;
+    padding: 8px 12px;
+    overflow: hidden;
+
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .book-stage {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex: 1;
+  }
+
+  .book {
+    zoom: 0.72;
+  }
+
+  .page-indicator {
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+}
+
+@media (max-width: 400px) and (max-height: 700px) and (orientation: portrait) {
+
+  .book {
+    zoom: 0.55;
+  }
+
+}
+
 /* ==========================================
    REDUCED MOTION
    ========================================== */

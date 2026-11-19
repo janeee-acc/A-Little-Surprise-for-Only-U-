@@ -10,8 +10,8 @@ const sheets = Array.from(document.querySelectorAll(".sheet"));
 const pageStatus = document.getElementById("pageStatus");
 const stage = document.querySelector(".book-stage");
 const music = document.getElementById("birthdayMusic");
-const rotatedMobileQuery = window.matchMedia(
-  "(max-width: 700px) and (orientation: portrait)"
+const landscapeMobileQuery = window.matchMedia(
+  "(max-width: 900px) and (orientation: landscape)"
 );
 
 // ==========================================
@@ -23,6 +23,26 @@ let isTurning = false;
 
 const totalSheets = sheets.length;
 const turnDuration = 950;
+
+function fitBookToLandscape() {
+
+  if (!landscapeMobileQuery.matches) {
+    book.style.removeProperty("zoom");
+    return;
+  }
+
+  const scale = Math.min(
+    0.7,
+    stage.clientWidth / (book.offsetWidth * 2),
+    stage.clientHeight / book.offsetHeight
+  );
+
+  book.style.zoom = String(scale);
+
+}
+
+window.addEventListener("resize", fitBookToLandscape);
+fitBookToLandscape();
 
 function startMusic() {
 
@@ -195,23 +215,6 @@ book.addEventListener("click", (event) => {
 
   if (isTurning) return;
 
-  if (rotatedMobileQuery.matches) {
-    const rect = stage.getBoundingClientRect();
-    event.stopPropagation();
-
-    if (currentSheet === 0) {
-      nextPage();
-    } else if (currentSheet === totalSheets) {
-      previousPage();
-    } else if (event.clientY < rect.top + rect.height / 2) {
-      previousPage();
-    } else {
-      nextPage();
-    }
-
-    return;
-  }
-
   // Front cover: open book
   if (currentSheet === 0) {
     nextPage();
@@ -242,20 +245,6 @@ book.addEventListener("click", (event) => {
 stage.addEventListener("click", (event) => {
 
   if (isTurning) return;
-
-  if (rotatedMobileQuery.matches) {
-    if (currentSheet === 0 || currentSheet === totalSheets) return;
-
-    const rect = stage.getBoundingClientRect();
-
-    if (event.clientY < rect.top + rect.height / 2) {
-      previousPage();
-    } else {
-      nextPage();
-    }
-
-    return;
-  }
 
   if (currentSheet === 0 ||
       currentSheet === totalSheets) {
@@ -316,28 +305,21 @@ stage.addEventListener("touchend", (event) => {
   const differenceY =
     event.changedTouches[0].screenY - touchStartY;
 
-  const primaryDifference = rotatedMobileQuery.matches
-    ? differenceY
-    : differenceX;
-  const secondaryDifference = rotatedMobileQuery.matches
-    ? differenceX
-    : differenceY;
-
-  // Ignore swipes across the book instead of along its page-turn axis.
-  if (Math.abs(secondaryDifference) > Math.abs(primaryDifference)) {
+  // Ignore vertical scrolling.
+  if (Math.abs(differenceY) > Math.abs(differenceX)) {
     return;
   }
 
-  // Swipe toward the top/left: next page.
-  if (primaryDifference < -50) {
+  // Swipe left: next page
+  if (differenceX < -50) {
 
     suppressClick = true;
     nextPage();
 
   }
 
-  // Swipe toward the bottom/right: previous page.
-  else if (primaryDifference > 50) {
+  // Swipe right: previous page
+  else if (differenceX > 50) {
 
     suppressClick = true;
     previousPage();

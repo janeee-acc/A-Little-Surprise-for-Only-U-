@@ -1107,7 +1107,22 @@ body {
   }
 
   .book .birthday-heading {
-    font-size: 36px;
+    font-size: 33px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .book .birthday-page {
+    padding: 14px 28px 48px;
+  }
+
+  .book .birthday-letter {
+    gap: 8px;
+  }
+
+  .book .birthday-letter p {
+    font-size: 8.5px;
+    line-height: 1.4;
   }
 
   .book .back-cover-center h2 {

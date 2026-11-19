@@ -44,6 +44,20 @@ function fitBookToLandscape() {
 window.addEventListener("resize", fitBookToLandscape);
 fitBookToLandscape();
 
+function enterFullscreen() {
+
+  const root = document.documentElement;
+
+  if (document.fullscreenElement || !root.requestFullscreen) {
+    return;
+  }
+
+  root.requestFullscreen({ navigationUI: "hide" }).catch(error => {
+    console.warn("Fullscreen request:", error);
+  });
+
+}
+
 function startMusic() {
 
   music.volume = 0.4;
@@ -217,6 +231,7 @@ book.addEventListener("click", (event) => {
 
   // Front cover: open book
   if (currentSheet === 0) {
+    enterFullscreen();
     nextPage();
     return;
   }
